@@ -1,0 +1,469 @@
+---
+- name: deploy access policies for swa storage aci fabric
+  hosts: swa_apic
+  connection: local
+  gather_facts: no
+
+#aci deploy pod policies. 
+
+  tasks:
+      - name: create a snapshot
+        aci_config_snapshot:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          export_policy: config_backup
+          max_count:  10
+          description: Snapshot to add storage leafs to fabric
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+#aci deploy fabric membership 
+
+      - name: fabric membership for leafs 621-630
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no   
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "polUni": {
+                    "attributes": {
+                        "dn": "uni"
+                    },
+                    "children": [
+                        {
+                            "ctrlrInst": {
+                                "attributes": {
+                                    "ownerKey": "",
+                                    "ownerTag": ""
+                                },
+                                "children": [
+                                    {
+                                        "fabricNodeIdentPol": {
+                                            "attributes": {
+                                                "name": "default",
+                                                "ownerKey": "",
+                                                "ownerTag": ""
+                                            },
+                                            "children": [
+                                                {
+                                                    "fabricNodeIdentP": {
+                                                        "attributes": {
+                                                            "name": "{{ item.name }}",
+                                                            "nodeId": "{{ item.nodeid }}",
+                                                            "serial": "{{ item.sn }}",
+                                                            "descr": "{{ item.desc }}",
+                                                            "fabricId": "1",
+                                                            "podId": "1"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        delegate_to: localhost
+        with_items: "{{ membership }}"
+
+#aci deploy oob mgmt ip to all leafs
+
+      - name: Add OOB Mgmt IP to leafs 621
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.61/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-621]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-621",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+      - name: Add OOB Mgmt IP to leafs 622
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.62/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-622]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-622",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+      - name: Add OOB Mgmt IP to leafs 623
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.63/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-623]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-623",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+      - name: Add OOB Mgmt IP to leafs 624
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.64/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-624]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-624",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+      - name: Add OOB Mgmt IP to leafs 625
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.65/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-625]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-625",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+      - name: Add OOB Mgmt IP to leafs 626
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.66/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-626]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-626",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+      - name: Add OOB Mgmt IP to leafs 627
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.67/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-627]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-627",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+      - name: Add OOB Mgmt IP to leafs 628
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.68/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-628]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-628",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+      - name: Add OOB Mgmt IP to leafs 629
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.69/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-629]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-629",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+      - name: Add OOB Mgmt IP to leafs 630
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "mgmtRsOoBStNode": {
+                            "attributes": {
+                            "addr": "10.128.1.70/24",
+                            "dn": "uni/tn-mgmt/mgmtp-default/oob-default/rsooBStNode-[topology/pod-1/node-630]",
+                            "gw": "10.128.1.1",
+                            "tDn": "topology/pod-1/node-630",
+                            "v6Addr": "::",
+                            "v6Gw": "::"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+#aci deploy interface and leaf and interface profiles
+
+
+      - name: deploy interface profiles for storage aci fabric leafs 621-630
+        aci_interface_policy_leaf_profile:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         leaf_interface_profile: "{{ item }}"
+         state: present
+        with_items: "{{ int_profiles }}"
+
+
+      - name: deploy leaf profiles for for storage aci fabric leafs 621-630
+        aci_switch_policy_leaf_profile:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         leaf_profile: "{{ item }}"
+         state: present
+        with_items: "{{ leaf_profiles }}"
+
+      - name: deploy leaf switches to respective leaf profiles for swa storage aci fabric leafs 621-622
+        aci_switch_leaf_selector:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         leaf_profile: "{{ item.leaf_profiles }}"
+         leaf:  "{{ item.leaf }}"
+         leaf_node_blk: "{{ item.node }}"
+         from: "{{ item.from }}"
+         to: "{{ item.to }}"
+         state: present
+        with_items: "{{ leaf_map }}"
+
+      - name: map all interface profiles to all leaf profiles 
+        aci_interface_selector_to_switch_policy_leaf_profile:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         leaf_profile: "{{ item.leaf_profiles }}"
+         interface_selector: "{{ item.int_profiles }}"
+         state: present
+        with_items: "{{ access_map }}"
+
+      - name: create vPC protection groups for vpc pairings
+        aci_switch_policy_vpc_protection_group:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         protection_group: "{{ item.pg }}"
+         protection_group_id: "{{ item.grp_ids }}"
+         switch_1_id: "{{ item.sw1_ids }}"
+         switch_2_id: "{{ item.sw2_ids }}"
+         state: present
+        with_items: "{{ vpc_map }}"
+
+
+#aci deploy policy group
+
+      - name: deploy policy groups for vpc(name here)
+        aci_interface_policy_leaf_policy_group:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         lag_type: node
+         policy_group: vpc_name
+         port_channel_policy: lacp-active
+         cdp_policy: cdp-on
+         lldp_policy: lldp-on
+         aep: global_aep
+         state: present
+
+#aci deploy interface selectors to policy group
+
+      - name: assign ports to interface profiles for int prof 1103
+        aci_access_port_to_interface_policy_leaf_profile:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         leaf_interface_profile: "{{ item.int_prof }}"
+         access_port_selector: "{{ item.port_sel }}"
+         leaf_port_blk: "{{ item.leafs }}"
+         interface_type: vpc
+         from_card: 1
+         from_port: "{{ item.from }}"
+         to_port: "{{ item.to }}"
+         policy_group: "{{ item.pg }}"
+         state: present
+        with_items: "{{ intprof_621_map }}"
+
+
