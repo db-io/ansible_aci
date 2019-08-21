@@ -1,0 +1,64 @@
+---
+name:
+  - leaf_621
+  - leaf_622
+  - leaf_623
+  - leaf_624
+  - leaf_625
+  - leaf_626
+  - leaf_627
+  - leaf_628
+  - leaf_629
+  - leaf_630
+
+nodeid:
+  - 621
+  - 622
+  - 623
+  - 624
+  - 625
+  - 626
+  - 627
+  - 628
+  - 629
+  - 630
+
+
+sn:
+  - serial01
+  - serial02
+  - serial03
+  - serial04
+  - serial05
+  - serial06
+  - serial07
+  - serial08
+  - serial09
+  - serial10
+
+desc:
+  - leaf 621
+  - leaf 622
+  - leaf 623
+  - leaf 624
+  - leaf 625
+  - leaf 626
+  - leaf 627
+  - leaf 628
+  - leaf 629
+  - leaf 630
+
+membership:
+  - {name: 'leaf_621', nodeid: '621', sn: 'serial01', desc: 'leaf 621'}
+  - {name: 'leaf_622', nodeid: '622', sn: 'serial02', desc: 'leaf 622'}
+  - {name: 'leaf_623', nodeid: '623', sn: 'serial03', desc: 'leaf 623'}
+  - {name: 'leaf_624', nodeid: '624', sn: 'serial04', desc: 'leaf 624'}
+  - {name: 'leaf_625', nodeid: '625', sn: 'serial05', desc: 'leaf 625'}
+  - {name: 'leaf_626', nodeid: '626', sn: 'serial06', desc: 'leaf 626'}
+  - {name: 'leaf_627', nodeid: '627', sn: 'serial07', desc: 'leaf 627'}
+  - {name: 'leaf_628', nodeid: '628', sn: 'serial08', desc: 'leaf 628'}
+  - {name: 'leaf_629', nodeid: '629', sn: 'serial09', desc: 'leaf 629'}
+  - {name: 'leaf_630', nodeid: '630', sn: 'serial10', desc: 'leaf 630'}
+
+
+
