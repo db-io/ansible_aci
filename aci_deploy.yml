@@ -1,0 +1,1102 @@
+---
+- name: aci deploy plays for fabric deployments
+  hosts: aci_deploy_apic
+  connection: local
+  gather_facts: no
+
+#aci deploy pod policies. 
+
+  tasks:
+      - name: create a snapshot
+        aci_config_snapshot:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          export_policy: config_backup
+          max_count:  10
+          description: Pod Policies SnapShot 
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Add a fabric pod policy group
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "fabricPodPGrp": {
+                            "attributes": {
+                                "descr": "",
+                                "dn": "uni/fabric/funcprof/podpgrp-Pod_Pol_Grp",
+                                "name": "Pod_Pol_Grp",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            },
+                            "children": [
+                                {
+                                    "fabricRsTimePol": {
+                                        "attributes": {
+                                            "tnDatetimePolName": "default"
+                                        }
+                                    }
+                                },
+                                {
+                                    "fabricRsSnmpPol": {
+                                        "attributes": {
+                                            "tnSnmpPolName": "default"
+                                        }
+                                    }
+                                },
+                                {
+                                    "fabricRsPodPGrpIsisDomP": {
+                                        "attributes": {
+                                            "tnIsisDomPolName": "default"
+                                        }
+                                    }
+                                },
+                                {
+                                    "fabricRsPodPGrpCoopP": {
+                                        "attributes": {
+                                            "tnCoopPolName": "default"
+                                        }
+                                    }
+                                },
+                                {
+                                    "fabricRsPodPGrpBGPRRP": {
+                                        "attributes": {
+                                            "tnBgpInstPolName": "default"
+                                        }
+                                    }
+                                },
+                                {
+                                    "fabricRsCommPol": {
+                                        "attributes": {
+                                            "tnCommPolName": "default"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+
+      - name: Associate Fabric Policy Group to Policy Profile
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "fabricPodP": {
+                            "attributes": {
+                                "descr": "",
+                                "dn": "uni/fabric/podprof-default",
+                                "name": "default",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            },
+                            "children": [
+                                {
+                                    "fabricPodS": {
+                                        "attributes": {
+                                            "descr": "",
+                                            "name": "default",
+                                            "nameAlias": "",
+                                            "ownerKey": "",
+                                            "ownerTag": "",
+                                            "type": "ALL"
+                                        },
+                                        "children": [
+                                            {
+                                                "fabricRsPodPGrp": {
+                                                    "attributes": {
+                                                        "tDn": "uni/fabric/funcprof/podpgrp-Pod_Pol_Grp"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+
+      - name: Add Route Reflector BGP Policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "bgpInstPol": {
+                            "attributes": {
+                                "descr": "",
+                                "dn": "uni/fabric/bgpInstP-default",
+                                "name": "default",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            },
+                            "children": [
+                                {
+                                    "bgpRRP": {
+                                        "attributes": {
+                                            "descr": "",
+                                            "name": "",
+                                            "nameAlias": ""
+                                        },
+                                        "children": [
+                                            {
+                                                "bgpRRNodePEp": {
+                                                    "attributes": {
+                                                        "descr": "",
+                                                        "id": "1902",
+                                                        "nameAlias": "",
+                                                        "podId": "1"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "bgpRRNodePEp": {
+                                                    "attributes": {
+                                                        "descr": "",
+                                                        "id": "1901",
+                                                        "nameAlias": "",
+                                                        "podId": "1"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "bgpExtRRP": {
+                                        "attributes": {
+                                            "descr": "",
+                                            "name": "",
+                                            "nameAlias": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "bgpAsP": {
+                                        "attributes": {
+                                            "asn": "65337",
+                                            "descr": "",
+                                            "name": "",
+                                            "nameAlias": ""
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+      - name: Add NTP Policies to Fabric Pod Policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "datetimePol": {
+                            "attributes": {
+                                "adminSt": "enabled",
+                                "authSt": "disabled",
+                                "descr": "",
+                                "dn": "uni/fabric/time-default",
+                                "name": "default",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            },
+                            "children": [
+                                {
+                                    "datetimeNtpProv": {
+                                        "attributes": {
+                                            "descr": "",
+                                            "keyId": "0",
+                                            "maxPoll": "6",
+                                            "minPoll": "4",
+                                            "name": "172.24.9.113",
+                                            "nameAlias": "",
+                                            "preferred": "no"
+                                        },
+                                        "children": [
+                                            {
+                                                "datetimeRsNtpProvToEpg": {
+                                                    "attributes": {
+                                                        "tDn": "uni/tn-mgmt/mgmtp-default/oob-default"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+
+#aci deploy fabric membership 
+
+      - name: fabric membership for leafs 
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no   
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "polUni": {
+                    "attributes": {
+                        "dn": "uni"
+                    },
+                    "children": [
+                        {
+                            "ctrlrInst": {
+                                "attributes": {
+                                    "ownerKey": "",
+                                    "ownerTag": ""
+                                },
+                                "children": [
+                                    {
+                                        "fabricNodeIdentPol": {
+                                            "attributes": {
+                                                "name": "default",
+                                                "ownerKey": "",
+                                                "ownerTag": ""
+                                            },
+                                            "children": [
+                                                {
+                                                    "fabricNodeIdentP": {
+                                                        "attributes": {
+                                                            "name": "{{ item.name }}",
+                                                            "nodeId": "{{ item.nodeid }}",
+                                                            "serial": "{{ item.sn }}",
+                                                            "descr": "{{ item.desc }}",
+                                                            "fabricId": "1",
+                                                            "podId": "1"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        delegate_to: localhost
+        with_items: "{{ membership }}"
+
+
+#aci deploy global policies.
+
+      - name: create a snapshot
+        aci_config_snapshot:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          export_policy: config_backup
+          max_count:  10
+          description: Global Policies SnapShot July 29 2019
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: create a vlan pool
+        aci_vlan_pool:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          pool: PHYS
+          pool_allocation_mode: static
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+      - name: add vlans 20-2200 to vlan pool
+        aci_encap_pool_range:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no  
+          pool: PHYS
+          pool_type: vlan
+          pool_allocation_mode: static
+          range_name: PHYS
+          range_start: 20
+          range_end: 2200
+          allocation_mode: inherit
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+      - name: create phys domain 
+        aci_domain: 
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no  
+          domain: PHYS
+          domain_type: phys
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+      - name: create external domain for l3 outs
+        aci_domain:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          domain: EXT-ROUTED
+          domain_type: l3dom
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+      - name: Associate pool to phy dom
+        aci_domain_to_vlan_pool:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          domain: PHYS
+          domain_type: phys
+          pool: PHYS
+          pool_allocation_mode: static
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+      - name: Associate pool to l3out dom
+        aci_domain_to_vlan_pool:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          domain: EXT-ROUTED
+          domain_type: l3dom
+          pool: PHYS
+          pool_allocation_mode: static
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+      - name: Add production aep
+        aci_aep:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          aep: MAIN-AEP
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Associate phy dom to main-aep
+        aci_aep_to_domain:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          aep: MAIN-AEP
+          domain: PHYS
+          domain_type: phys
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+      - name: Associate l3 dom to main-aep
+        aci_aep_to_domain:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          aep: MAIN-AEP
+          domain: EXT-ROUTED
+          domain_type: l3dom
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+#aci deploy access policies.
+
+      - name: create a snapshot
+        aci_config_snapshot:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no               
+          export_policy: config_backup
+          max_count:  10
+          description: Access Policies SnapShot July 29 2019
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+          
+      - name: deploy interface profiles
+        aci_interface_policy_leaf_profile:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         leaf_interface_profile: "{{ item }}"
+         state: present
+        with_items: "{{ int_profiles }}"
+
+
+      - name: deploy leaf profiles 
+        aci_switch_policy_leaf_profile:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         leaf_profile: "{{ item }}"
+         state: present
+        with_items: "{{ leaf_profiles }}"
+
+      - name: deploy leaf switches to respective leaf profiles
+        aci_switch_leaf_selector:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         leaf_profile: "{{ item.leaf_profiles }}"
+         leaf:  "{{ item.leaf }}"
+         leaf_node_blk: "{{ item.node }}"
+         from: "{{ item.from }}"
+         to: "{{ item.to }}"
+         state: present
+        with_items: "{{ leaf_map }}"
+
+
+      - name: map all interface profiles to all leaf profiles 
+        aci_interface_selector_to_switch_policy_leaf_profile:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         leaf_profile: "{{ item.leaf_profiles }}"
+         interface_selector: "{{ item.int_profiles }}"
+         state: present
+        with_items: "{{ access_map }}"
+
+
+      - name: create vPC protection groups for vpc pairings
+        aci_switch_policy_vpc_protection_group:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no
+         protection_group: "{{ item.pg }}"
+         protection_group_id: "{{ item.grp_ids }}"
+         switch_1_id: "{{ item.sw1_ids }}"
+         switch_2_id: "{{ item.sw2_ids }}"
+         state: present
+        with_items: "{{ vpc_map }}"
+
+
+      - name: Add 40Gb link level policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "fabricHIfPol": {
+                            "attributes": {
+                                "autoNeg": "on",
+                                "descr": "",
+                                "dn": "uni/infra/hintfpol-40Gb",
+                                "fecMode": "inherit",
+                                "linkDebounce": "100",
+                                "name": "40Gb",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": "",
+                                "speed": "40G"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Add 10Gb link level policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "fabricHIfPol": {
+                            "attributes": {
+                                "autoNeg": "on",
+                                "descr": "",
+                                "dn": "uni/infra/hintfpol-10Gb",
+                                "fecMode": "inherit",
+                                "linkDebounce": "100",
+                                "name": "10Gb",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": "",
+                                "speed": "10G"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Add 1Gb link level policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "fabricHIfPol": {
+                            "attributes": {
+                                "autoNeg": "on",
+                                "descr": "",
+                                "dn": "uni/infra/hintfpol-1Gb",
+                                "fecMode": "inherit",
+                                "linkDebounce": "100",
+                                "name": "1Gb",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": "",
+                                "speed": "1G"
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Add cdp disable policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "cdpIfPol": {
+                            "attributes": {
+                                "adminSt": "disabled",
+                                "descr": "",
+                                "dn": "uni/infra/cdpIfP-CDP-Disabled",
+                                "name": "CDP-Disabled",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Add cdp enable policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "cdpIfPol": {
+                            "attributes": {
+                                "adminSt": "enabled",
+                                "descr": "",
+                                "dn": "uni/infra/cdpIfP-CDP-Enabled",
+                                "name": "CDP-Enabled",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Add lldp disable policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "lldpIfPol": {
+                            "attributes": {
+                                "adminRxSt": "disabled",
+                                "adminTxSt": "disabled",
+                                "descr": "",
+                                "dn": "uni/infra/lldpIfP-LLDP-Disabled",
+                                "name": "LLDP-Disabled",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+      - name: Add lldp enable policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "lldpIfPol": {
+                            "attributes": {
+                                "adminRxSt": "enabled",
+                                "adminTxSt": "enabled",
+                                "descr": "",
+                                "dn": "uni/infra/lldpIfP-LLDP-Enabled",
+                                "name": "LLDP-Enabled",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Add lacp active policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "lacpLagPol": {
+                            "attributes": {
+                                "ctrl": "fast-sel-hot-stdby,graceful-conv,susp-individual",
+                                "descr": "",
+                                "dn": "uni/infra/lacplagp-LACP-Active",
+                                "maxLinks": "16",
+                                "minLinks": "1",
+                                "mode": "active",
+                                "name": "LACP-Active",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Add lacp on policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "lacpLagPol": {
+                            "attributes": {
+                                "ctrl": "fast-sel-hot-stdby,graceful-conv,susp-individual",
+                                "descr": "",
+                                "dn": "uni/infra/lacplagp-LACP-On",
+                                "maxLinks": "16",
+                                "minLinks": "1",
+                                "mode": "off",
+                                "name": "LACP-On",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: Add mac pin policy
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "totalCount": "1",
+                "imdata": [
+                    {
+                        "lacpLagPol": {
+                            "attributes": {
+                                "ctrl": "fast-sel-hot-stdby,graceful-conv,susp-individual",
+                                "descr": "",
+                                "dn": "uni/infra/lacplagp-MAC-Pin",
+                                "maxLinks": "16",
+                                "minLinks": "1",
+                                "mode": "mac-pin",
+                                "name": "MAC-Pin",
+                                "nameAlias": "",
+                                "ownerKey": "",
+                                "ownerTag": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+#aci deploy policy groups.
+
+      - name: deploy policy groups for a vpc
+        aci_interface_policy_leaf_policy_group:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         lag_type: leaf
+         policy_group: polgrp_name
+         link_level_policy: 10Gb
+         cdp_policy: CDP-Enabled
+         lldp_policy: LLDP-Enabled
+         aep: MAIN-AEP
+         state: present
+
+
+      - name: assign ports to interface profiles for an int prof example 1103 int prof
+        aci_access_port_to_interface_policy_leaf_profile:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         leaf_interface_profile: "{{ item.int_prof }}"
+         access_port_selector: "{{ item.port_sel }}"
+         leaf_port_blk: "{{ item.leafs }}"
+         interface_type: vpc
+         from_card: 1
+         from_port: "{{ item.from }}"
+         to_port: "{{ item.to }}"
+         policy_group: "{{ item.pg }}"
+         state: present
+        with_items: "{{ intprof_1103_map }}"
+
+
+      - name: assign ports to interface profiles for an int prof example 1104 int prof
+        aci_access_port_to_interface_policy_leaf_profile:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         leaf_interface_profile: "{{ item.int_prof }}"
+         access_port_selector: "{{ item.port_sel }}"
+         leaf_port_blk: "{{ item.leafs }}"
+         interface_type: vpc
+         from_card: 1
+         from_port: "{{ item.from }}"
+         to_port: "{{ item.to }}"
+         policy_group: "{{ item.pg }}"
+         state: present
+        with_items: "{{ intprof_1104_map }}"
+
+
+#aci deploy tenant
+
+      - name: create a snapshot
+        aci_config_snapshot:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no               
+          export_policy: config_backup
+          max_count:  10
+          description: Tenant Policies SnapShot July 29 2019
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: add tenants with loop
+        aci_tenant:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         tenant: "{{ item }}"
+         state: present
+        with_items: "{{ tenants }}"
+
+        register: print_output
+      -   debug: var=print_output
+
+      - name: add vrf to prod tenant
+        aci_vrf:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         vrf: PROD_VRF
+         tenant: PROD
+         descr: Production vrf
+         policy_control_preference: enforced
+         policy_control_direction: ingress
+         state: present
+
+      - name: add vrf to pre-prod tenant
+        aci_vrf:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         vrf: PROD_VRF
+         tenant: PRE-PROD
+         descr: Pre Production vrf
+         policy_control_preference: enforced
+         policy_control_direction: ingress
+         state: present
+
+      - name: add prod app profile
+        aci_ap:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         tenant: PROD
+         ap: PROD-AP
+         description: Production App Profile
+         state: present
+
+      - name: add pre prod app profile
+        aci_ap:
+         host: "{{ inventory_hostname }}"
+         username: "{{ username }}"
+         password: "{{ password }}"
+         validate_certs: no 
+         tenant: PRE-PROD
+         ap: PRE-PROD-AP
+         description: Pre Production App Profile
+         state: present
+
+      - name: add multiple bridge domains with loop
+        aci_bd:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no               
+          state: present
+          tenant: PROD
+          arp_flooding: yes
+          l2_unknown_unicast: flood
+          enable_routing: no
+          bd: "{{ item }}"
+          vrf: PROD_VRF
+        with_items: "{{ bds }}"
+
+
+      - name: deploy EPGs and associate to BDs using a dictionary
+        aci_epg:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no                
+          state: present
+          tenant: PROD
+          ap: PROD-AP
+          epg: "{{ item.epgs }}"
+          bd: "{{ item.bds }}"
+        with_items: "{{ epg_list }}"
+
+      - name: add a new physical domain to a list of EPGs
+        aci_epg_to_domain:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no                
+          state: present
+          tenant: PROD
+          ap: PROD-AP
+          epg: "{{ item }}"
+          domain: PHYS
+          domain_type: phys
+        with_items: "{{ epgs}}"
