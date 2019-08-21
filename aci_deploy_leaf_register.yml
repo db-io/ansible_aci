@@ -1,0 +1,80 @@
+---
+- name: deploy fabric membership for aci leaf registration
+  hosts: customer_apic
+  connection: local
+  gather_facts: no
+
+#aci deploy pod policies. 
+
+  tasks:
+      - name: create a snapshot
+        aci_config_snapshot:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          export_policy: config_backup
+          max_count:  10
+          description: Snapshot to add storage leafs to fabric
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+#aci deploy fabric membership 
+
+      - name: fabric membership for leafs 621-630
+        aci_rest:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no   
+          path: /api/mo/uni.json
+          method: post
+          content:
+            {
+                "polUni": {
+                    "attributes": {
+                        "dn": "uni"
+                    },
+                    "children": [
+                        {
+                            "ctrlrInst": {
+                                "attributes": {
+                                    "ownerKey": "",
+                                    "ownerTag": ""
+                                },
+                                "children": [
+                                    {
+                                        "fabricNodeIdentPol": {
+                                            "attributes": {
+                                                "name": "default",
+                                                "ownerKey": "",
+                                                "ownerTag": ""
+                                            },
+                                            "children": [
+                                                {
+                                                    "fabricNodeIdentP": {
+                                                        "attributes": {
+                                                            "name": "{{ item.name }}",
+                                                            "nodeId": "{{ item.nodeid }}",
+                                                            "serial": "{{ item.sn }}",
+                                                            "descr": "{{ item.desc }}",
+                                                            "fabricId": "1",
+                                                            "podId": "1"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        delegate_to: localhost
+        with_items: "{{ membership }}"
+
