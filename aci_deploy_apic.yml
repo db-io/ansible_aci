@@ -1,0 +1,113 @@
+---
+int_profiles:
+ - leaf1101_int_prof
+ - leaf1102_int_prof
+ - leaf1103_int_prof
+ - leaf1104_int_prof
+
+
+
+leaf_profiles:
+ - leaf1101_leaf_prof
+ - leaf1102_leaf_prof
+ - leaf1103_leaf_prof
+ - leaf1104_leaf_prof
+
+
+
+tenants:
+- PROD
+- PRE-PROD
+
+grp_ids:
+ - 101
+ - 103
+ - 105
+
+
+sw1_ids:
+  - 1101
+  - 1103
+  - 1105
+
+
+sw2_ids:
+  - 1102
+  - 1104
+  - 1106
+
+
+from_port:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+
+
+to_port:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+
+bds:
+- bd01
+- bd02
+- bd03
+
+epgs:
+- epg01
+- epg02
+- epg03
+
+
+leaf_map:
+  - {leaf_profiles: 'leaf1101_leaf_prof', leaf: '1101', node: '1101', from: '1101', to: '1101'}
+  - {leaf_profiles: 'leaf1102_leaf_prof', leaf: '1102', node: '1102', from: '1102', to: '1102'}
+  - {leaf_profiles: 'leaf1103_leaf_prof', leaf: '1103', node: '1103', from: '1103', to: '1103'}
+  - {leaf_profiles: 'leaf1104_leaf_prof', leaf: '1104', node: '1104', from: '1104', to: '1104'}
+
+
+access_map:
+  - {int_profiles: 'leaf1101_int_prof', leaf_profiles: 'leaf1101_leaf_prof'}
+  - {int_profiles: 'leaf1102_int_prof', leaf_profiles: 'leaf1102_leaf_prof'}
+  - {int_profiles: 'leaf1103_int_prof', leaf_profiles: 'leaf1103_leaf_prof'}
+
+
+
+vpc_map:
+  - {pg: 'vpc_1101_1102', grp_ids: '101', sw1_ids: '1101', sw2_ids: '1102'}
+  - {pg: 'vpc_1103_1104', grp_ids: '103', sw1_ids: '1103', sw2_ids: '1104'}
+
+
+
+intprof_1103_map:
+  - {int_prof: 'leaf1103_int_prof', port_sel: 'port_selec_name1', leafs: '1103', from: '1', to: '1', pg: 'vpc_polgrp_name'}
+  - {int_prof: 'leaf1103_int_prof', port_sel: 'port_selec_name2', leafs: '1103', from: '2', to: '2', pg: 'vpc_polgrp_name'}
+
+intprof_1104_map:
+  - {int_prof: 'leaf1104_int_prof', port_sel: 'port_selec_name1', leafs: '1104', from: '1', to: '1', pg: 'vpc_polgrp_name'}
+  - {int_prof: 'leaf1104_int_prof', port_sel: 'port_selec_name2', leafs: '1104', from: '2', to: '2', pg: 'vpc_polgrp_name'}
+
+
+epg_list:
+  - {bds: 'bd01', epgs: 'epg01'}
+  - {bds: 'bd02', epgs: 'epg02'}
+  - {bds: 'bd03', epgs: 'epg03'}
+
+
+
+
+
+
+
+
+
