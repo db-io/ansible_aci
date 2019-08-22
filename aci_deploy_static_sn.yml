@@ -1,0 +1,49 @@
+---
+- name: aci deploy static bind for all  epgs
+  hosts: sn_apic
+  connection: local
+  gather_facts: no
+
+
+#aci snapshot. 
+
+  tasks:
+      - name: create a snapshot
+        aci_config_snapshot:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no
+          export_policy: config_backup
+          max_count:  10
+          description: aug 24 2019 svi gw migration
+          state: present
+        delegate_to: localhost
+
+        register: print_output
+      -   debug: var=print_output
+
+
+      - name: aci deploy static path bindings for epgs
+        aci_static_binding_to_epg:
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          validate_certs: no  
+          tenant: "{{ item.tn }}"
+          ap: "{{ item.ap }}"
+          epg: "{{ item.epg }}"
+          encap_id: "{{ item.encap }}"
+          deploy_immediacy: "{{ item.deploy }}"
+          interface_mode: "{{ item.mode }}"
+          interface_type: "{{ item.type }}"
+          pod_id: "{{ item.id }}"
+          leafs: "{{ item.leafs }}"
+          interface: "{{ item.ints }}"
+          state: present
+        with_items: "{{ static_bind}}"
+
+
+
+
+
