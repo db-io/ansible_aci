@@ -1,0 +1,68 @@
+---
+
+static_bind:
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan940_epg', encap: '940', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan930_epg', encap: '930', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan920_epg', encap: '920', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan910_epg', encap: '910', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan80_epg', encap: '80', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan605_epg', encap: '605', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan604_epg', encap: '604', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan580_epg', encap: '580', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan579_epg', encap: '579', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan553_epg', encap: '553', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan552_epg', encap: '552', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan551_epg', encap: '551', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan550_epg', encap: '550', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan50_epg', encap: '50', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan502_epg', encap: '502', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan501_epg', encap: '501', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan313_epg', encap: '313', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan312_epg', encap: '312', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan311_epg', encap: '311', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan310_epg', encap: '310', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan309_epg', encap: '309', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan308_epg', encap: '308', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan308_epg', encap: '308', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan307_epg', encap: '307', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan306_epg', encap: '306', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan305_epg', encap: '305', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan304_epg', encap: '304', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan303_epg', encap: '303', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan2_epg', encap: '2', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan245_epg', encap: '245', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan220_epg', encap: '220', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan219_epg', encap: '219', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan216_epg', encap: '216', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan214_epg', encap: '214', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan213_epg', encap: '213', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan212_epg', encap: '212', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan211_epg', encap: '211', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan210_epg', encap: '210', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan208_epg', encap: '208', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan207_epg', encap: '207', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan204_epg', encap: '204', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan203_epg', encap: '203', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan2004_epg', encap: '2004', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan2003_epg', encap: '2003', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan2001_epg', encap: '2001', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan2000_epg', encap: '2000', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan161_epg', encap: '161', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan160_epg', encap: '160', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan113_epg', encap: '113', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan112_epg', encap: '112', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan111_epg', encap: '111', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan110_epg', encap: '110', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan106_epg', encap: '106', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan105_epg', encap: '105', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan103_epg', encap: '103', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan102_epg', encap: '102', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+  - {tn: 'dc01_tn', ap: 'dc01_ap', epg: 'vlan100_epg', encap: '100', deploy: 'lazy', mode: 'trunk', type: 'vpc', id: '1', leafs: '101-102', ints: 'vpc_n7k_polgrp'}
+
+
+
+
+
+
+
+
